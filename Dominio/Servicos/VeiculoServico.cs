@@ -43,6 +43,10 @@ namespace minimal_api.Dominio.Servicos
             _contexto.SaveChanges();
         }
 
+        public List<Veiculo> Login(int pagina = 1, string? nome = null, string? marca = null)
+        {
+            throw new NotImplementedException();
+        }
 
         public List<Veiculo> Todos(int pagina = 1, string? nome = null, string? marca = null)
         {
