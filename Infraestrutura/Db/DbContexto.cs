@@ -18,6 +18,7 @@ namespace minimal_api.Infraestrutura.Db
         }
 
         public DbSet<Administrador> Administradors { get; set; } = default!;
+        public DbSet<Veiculo> Veiculos { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
