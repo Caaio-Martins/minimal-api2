@@ -1,7 +1,6 @@
 using minimal_api.Dominio.Entidades;
 using minimal_api.Dominio.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Test.Mocks
 {
@@ -9,58 +8,38 @@ namespace Test.Mocks
     {
         private static List<Veiculo> veiculos = new List<Veiculo>()
         {
-            new Veiculo { Id = 1, Nome = "Fusca", Marca = "Volkswagen", Ano = 1970 },
-            new Veiculo { Id = 2, Nome = "Civic", Marca = "Honda", Ano = 2020 }
+            new Veiculo { Id = 1, Nome = "Palio", Marca = "Fiat", Ano = 2010 },
+            new Veiculo { Id = 2, Nome = "Civic", Marca = "Honda", Ano = 2019 }
         };
+
+        public List<Veiculo> Todos(int? pagina = 1, string? nome = null, string? marca = null)
+        {
+            return veiculos;
+        }
 
         public Veiculo? BuscaPorId(int id)
         {
             return veiculos.Find(v => v.Id == id);
         }
 
-        public Veiculo Incluir(Veiculo veiculo)
+        public void Incluir(Veiculo veiculo)
         {
-            if (veiculo == null)
-                throw new ArgumentNullException(nameof(veiculo));
-
-            veiculo.Id = veiculos.Max(v => v.Id) + 1; // Garante que o ID seja único
-            veiculos.Add(veiculo);
-            return veiculo;
+            veiculo.Id = veiculos.Count + 1; // Atribui um novo Id
+            veiculos.Add(veiculo); // Adiciona o veículo à lista
         }
 
         public void Atualizar(Veiculo veiculo)
         {
-            var existingVeiculo = BuscaPorId(veiculo.Id);
-            if (existingVeiculo != null)
+            var index = veiculos.FindIndex(v => v.Id == veiculo.Id);
+            if (index != -1)
             {
-                existingVeiculo.Nome = veiculo.Nome;
-                existingVeiculo.Marca = veiculo.Marca;
-                existingVeiculo.Ano = veiculo.Ano;
+                veiculos[index] = veiculo; // Atualiza o veículo na lista
             }
         }
 
         public void Apagar(Veiculo veiculo)
         {
-            veiculos.Remove(veiculo);
-        }
-
-        public List<Veiculo> Todos(int? pagina = 1, string? nome = null, string? marca = null)
-        {
-            var query = veiculos.AsQueryable();
-            if (!string.IsNullOrEmpty(nome))
-            {
-                query = query.Where(v => v.Nome.ToLower().Contains(nome.ToLower()));
-            }
-            if (!string.IsNullOrEmpty(marca))
-            {
-                query = query.Where(v => v.Marca.ToLower().Contains(marca.ToLower()));
-            }
-
-            int itensPorPagina = 10;
-            if (pagina != null)
-                query = query.Skip(((int)pagina - 1) * itensPorPagina).Take(itensPorPagina);
-
-            return query.ToList();
+            veiculos.Remove(veiculo); // Remove o veículo da lista
         }
     }
 }
